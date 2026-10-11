@@ -5,7 +5,7 @@
     <%- page.content %>
   </div>
   <div class="post-tags">
-    <% (page.tags && page.tags.length) { page.tags.forEach(function(t){ %>
+    <% if (page.tags && page.tags.length) { page.tags.forEach(function(t){ %>
       <a class="tag" href="<%= url_for(t.path) %>">#<%= t.name %></a>
     <% })} %>
   </div>
