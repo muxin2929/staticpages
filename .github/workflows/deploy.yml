@@ -1,0 +1,23 @@
+name: 自动部署博客          # ① 工作流名字（显示在 Actions 页面，随便起）
+
+on: [push]                  # ② 触发条件：只要仓库收到 push 就运行
+
+jobs:                       # ③ 任务开始
+  deploy:
+    runs-on: ubuntu-latest  # ④ GitHub 免费提供一台"云电脑"来跑，系统 Ubuntu
+
+    steps:                  # ⑤ 在这台云电脑上按顺序执行以下步骤：
+      - uses: actions/checkout@v4       # 1. 把你的仓库源码下载到这台云电脑
+      - uses: actions/setup-node@v4     # 2. 装 Node.js 运行环境
+        with:
+          node-version: 20
+      - run: npm ci                     # 3. 安装博客项目依赖（hexo 等）
+      - run: npx hexo generate          # 4. 编译：md → public/ 目录里的 html
+      - uses: easingthemes/ssh-deploy@v4  # 5. 用密钥登录你的服务器并上传文件
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # 私钥（从你填的 Secret 读取）
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}          # 服务器 IP（同上）
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}          # 登录用户（同上）
+          SOURCE: "public/"             # 上传哪个文件夹（编译产物）
+          TARGET: "/www/wwwroot/muxcraft.cfd/blogs"   # 传到服务器的哪个目录（网站根目录）
+          EXCLUDE: "node_modules"       # 排除项，别把依赖也传上去
