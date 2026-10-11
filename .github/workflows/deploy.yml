@@ -18,7 +18,7 @@ jobs:                       # ③ 任务开始
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # 私钥（从你填的 Secret 读取）
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}          # 服务器 IP（同上）
           REMOTE_USER: ${{ secrets.REMOTE_USER }}          # 登录用户（同上）
-          SSH_PORT: "30089"                                 # 服务器实际 SSH 端口
+          REMOTE_PORT: "30089"                              # 服务器实际 SSH 端口（注意参数名是 REMOTE_PORT）
           SOURCE: "public/"             # 上传哪个文件夹（编译产物）
           TARGET: "/www/wwwroot/muxcraft.cfd/blogs"   # 传到服务器的哪个目录（网站根目录）
           EXCLUDE: "node_modules"       # 排除项，别把依赖也传上去
